@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+*.textClipping
+
+# Finder aliases to the original photos (not real images)
+/2026-11-23 *.jpg
+
+# Original photos and local tooling
+/_source/
+/.claude/
