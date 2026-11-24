@@ -6,7 +6,7 @@ import html, json, os, re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOMAIN = "https://xn--80aaemplaikqwwh.xn--p1ai"
 MAX = "https://max.ru/u/f9LHodD0cOJ-I2c5GvvgMV4BQCZMem87lvZ4GcqRK_pRCQoFt9h_9IcK-Cg"
-V = "18"
+V = "19"
 
 idx = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
 v_main = re.search(r"main\.js\?v=(\d+)", idx).group(1)
@@ -22,7 +22,7 @@ def pic(name, w, h, alt):
             f'<img src="/assets/img/{name}.jpg" width="{w}" height="{h}" alt="{html.escape(alt)}"></picture>')
 
 SERVICES = [
-  dict(slug="ventvyhody-na-krovlyu", nav="Вентвыходы на кровлю",
+  dict(slug="ventvyhody-na-krovlyu", price=4750, nav="Вентвыходы на кровлю",
     title="Монтаж вентиляционных выходов на кровлю",
     h1="Вентиляционные выходы на кровлю",
     desc="Монтаж вентиляционных выходов и вывод канализационного стояка через кровлю в Свердловской области. Проходные элементы под гибкую черепицу, металлочерепицу, профнастил и плоскую кровлю.",
@@ -43,7 +43,7 @@ SERVICES = [
          ("Не будет ли протекать?", "Проходной элемент повторяет профиль кровли, а примыкание мы герметизируем. Именно поэтому элемент подбираем под конкретное покрытие, а не ставим универсальный."),
          ("Можно ли делать зимой?", "Да, среди наших объектов есть смонтированные зимой. Условия обсуждаем после осмотра кровли."),
          ("Сколько стоит?", "Зависит от кровли, высоты и количества выходов. Ориентировочную стоимость назовём по фото, точную после осмотра.")]),
-  dict(slug="turbodeflektory", nav="Турбодефлекторы",
+  dict(slug="turbodeflektory", price=5750, nav="Турбодефлекторы",
     title="Установка турбодефлекторов и дефлекторов",
     h1="Турбодефлекторы и дефлекторы",
     desc="Установка турбодефлекторов и дефлекторов на вентшахты и трубы в Свердловской области. Подбор диаметра и высоты, монтаж на кирпичные шахты.",
@@ -61,7 +61,7 @@ SERVICES = [
     faq=[("Чем турбодефлектор отличается от обычного дефлектора?", "Турбодефлектор вращается от ветра и создаёт разрежение в канале, поэтому тяга сильнее. Обычный дефлектор неподвижен: он защищает канал от осадков и помогает тяге за счёт формы."),
          ("Можно ли поставить турбодефлектор на дымоход?", "Зависит от того, что за отопитель подключён к трубе. Для дымоходов подбираем решение после осмотра, а не ставим турбодефлектор по умолчанию."),
          ("Сколько стоит?", "Зависит от диаметра, материала и количества шахт. Ориентир назовём по фото, точную стоимость после осмотра.")]),
-  dict(slug="kozhuhi-dlya-dymohodov", nav="Кожухи для дымоходов",
+  dict(slug="kozhuhi-dlya-dymohodov", price=5999, nav="Кожухи для дымоходов",
     title="Кожухи и колпаки для дымоходов и вентшахт",
     h1="Кожухи и колпаки для дымоходов и вентшахт",
     desc="Изготовление и монтаж кожухов и колпаков на дымоходы и вентшахты по размеру трубы, в цвет кровли. Свердловская область.",
@@ -79,7 +79,7 @@ SERVICES = [
     faq=[("Зачем кожух, если труба целая?", "Кирпичная кладка на крыше постоянно мокнет и промерзает, и со временем разрушается. Кожух защищает её от воды, а заодно выглядит аккуратно."),
          ("Можно ли в цвет кровли?", "Да, кожух делаем в цвет покрытия, чтобы труба смотрелась частью крыши."),
          ("Сколько стоит?", "Зависит от размеров трубы, высоты и оголовка. Ориентир назовём по фото, точную стоимость после замера.")]),
-  dict(slug="kiv-125", nav="Приточные клапаны КИВ-125",
+  dict(slug="kiv-125", price=4999, nav="Приточные клапаны КИВ-125",
     title="Установка приточного клапана КИВ-125",
     h1="Приточные клапаны КИВ-125",
     desc="Установка приточных клапанов КИВ-125 в стену частного дома в Свердловской области. Свежий воздух без открытых окон, меньше конденсата на стёклах.",
@@ -120,6 +120,14 @@ SERVICES = [
          ("Сколько стоит?", "Зависит от площади, количества комнат и оборудования. После осмотра и расчёта назовём стоимость по этапам.")]),
 ]
 
+def fmt(n):
+    return f"{n:,}".replace(",", "\u00a0")
+
+def price_html(s):
+    if "price" in s:
+        return f'<p class="svc-price"><b>от {fmt(s["price"])} ₽</b><span>простой монтаж без лесов, точная цена после осмотра</span></p>'
+    return '<p class="svc-price"><b>по расчёту</b><span>стоимость считаем после осмотра и по этапам</span></p>'
+
 def page(s):
     url = f"{DOMAIN}/uslugi/{s['slug']}/"
     faq_html = "\n".join(
@@ -132,10 +140,11 @@ def page(s):
     others = "\n".join(
         f'          <li><a href="/uslugi/{o["slug"]}/">{html.escape(o["nav"])}</a></li>'
         for o in SERVICES if o is not s)
+    offer = ({"offers": {"@type": "Offer", "priceCurrency": "RUB", "priceSpecification": {"@type": "PriceSpecification", "minPrice": s["price"], "priceCurrency": "RUB"}}} if "price" in s else {})
     ld = [
       {"@context": "https://schema.org", "@type": "Service", "name": s["h1"], "description": s["desc"],
-       "areaServed": "Свердловская область", "url": url,
-       "provider": {"@type": "HomeAndConstructionBusiness", "name": "Вектор климата", "url": DOMAIN + "/", "telephone": "+7 963 855-50-08"}},
+       "areaServed": "Свердловская область", "url": url, **offer,
+       "provider": {"@type": "HomeAndConstructionBusiness", "name": "Вектор климата", "url": DOMAIN + "/", "telephone": "+7 963 855-50-08", "openingHours": "Mo-Fr 08:00-18:00"}},
       {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Главная", "item": DOMAIN + "/"},
         {"@type": "ListItem", "position": 2, "name": "Услуги", "item": DOMAIN + "/#services"},
@@ -178,6 +187,7 @@ def page(s):
           <h1 class="svc-hero__title">{html.escape(s["h1"])}</h1>
           <p class="svc-hero__lead">{html.escape(s["lead"])}</p>
           <p class="service__spec">{html.escape(s["spec"])}</p>
+          {price_html(s)}
           <div class="call__actions">
             <a class="btn btn--dark" href="tel:+79638555008" data-contact="phone-action"><svg class="btn__icon" aria-hidden="true"><use href="#i-phone"/></svg>+7 (963) 855-50-08</a>
             <a class="btn btn--max" href="{MAX}" target="_blank" rel="noopener" data-contact="max"><svg class="btn__icon" aria-hidden="true"><use href="#i-chat"/></svg>Написать в MAX</a>
@@ -224,7 +234,7 @@ def page(s):
           </ul>
         </div>
         <div class="call__phone">
-          <span class="call__label">Телефон, <span data-contact="hours">Пн–Пт</span></span>
+          <span class="call__label">Телефон, <span data-contact="hours">Пн–Пт, 8:00–18:00</span></span>
           <a class="call__number" href="tel:+79638555008" data-contact="phone">+7 (963) 855-50-08</a>
           <div class="call__actions">
             <a class="btn btn--dark" href="tel:+79638555008" data-contact="phone-action"><svg class="btn__icon" aria-hidden="true"><use href="#i-phone"/></svg>Позвонить</a>

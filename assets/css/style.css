@@ -645,3 +645,7 @@ a.contact__value:hover { color: #fff; }
   .svc-hero__media { aspect-ratio: 16 / 10; }
   .svc-cols { grid-template-columns: 1fr; }
 }
+.svc-price { display: grid; gap: 2px; }
+.svc-price b { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.6rem, 1.2rem + 1vw, 2.1rem); line-height: 1.1; }
+.svc-price span { font-size: var(--fs-small); color: var(--ink-3); }
+.service__price { margin-top: 16px; font-family: var(--font-display); font-size: 1.35rem; }
