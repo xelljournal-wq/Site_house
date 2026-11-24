@@ -60,7 +60,7 @@
     const sections = [...map.keys()].map((id) => document.getElementById(id)).filter(Boolean);
     const dock = $("#dock");
     const hero = $(".hero");
-    const calc = $("#calc");
+    const call = $("#call");
     const contacts = $("#contacts");
     let ticking = false;
 
@@ -75,7 +75,7 @@
 
       if (dock) {
         const pastHero = hero ? hero.getBoundingClientRect().bottom < vh * 0.4 : true;
-        const overCta = [calc, contacts].some((s) => {
+        const overCta = [call, contacts].some((s) => {
           if (!s) return false;
           const r = s.getBoundingClientRect();
           return r.top < vh * 0.75 && r.bottom > vh * 0.25;
