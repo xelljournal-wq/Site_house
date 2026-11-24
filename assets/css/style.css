@@ -332,6 +332,8 @@ ul, ol { padding: 0; list-style: none; }
 .service__media--scheme { background: var(--snow-2); }
 @media (min-width: 1025px) {
   .service:not(.is-active) .service__title { color: var(--ink-3); }
+  /* Каждая услуга занимает больше прокрутки: фото слева дольше остаётся на месте */
+  .service { min-height: 68vh; display: flex; flex-direction: column; justify-content: center; }
 }
 
 /* ----------------------------------------------------------------- Works */
